@@ -14,7 +14,8 @@ export const createComment = async (req: Request, res: Response) => {
     if (!content) return res.status(400).json({ error: "Comment content is required" });
 
     // verify product exists
-    const product = await queries.getProductById(productId as string);
+    //const product = await queries.getProductById(productId as string);
+    const product = await queries.getProductIdById(productId as string);
     if (!product) return res.status(404).json({ error: "Product not found" });
 
     const comment = await queries.createComment({
@@ -40,6 +41,7 @@ export const deleteComment = async (req: Request, res: Response) => {
 
     // check if comment exists and belongs to user
     const existingComment = await queries.getCommentById(commentId as string);
+    
     if (!existingComment) return res.status(404).json({ error: "Comment not found" });
 
     if (existingComment.userId !== userId) {

@@ -88,6 +88,27 @@ export const getProductById = async (id: string) => {
   });
 };
 
+export const getProductOwnerById = async (id: string) => {
+  return db.query.products.findFirst({
+    columns: {
+      id: true,
+      userId: true,
+    },
+    where: eq(products.id, id),
+  });
+};
+
+export const getProductIdById = async (id: string) => {
+  return db.query.products.findFirst({
+    columns: {
+      id: true,
+    },
+    where: eq(products.id, id),
+  });
+};
+
+
+
 export const getProductsByUserId = async (userId: string) => {
   return db.query.products.findMany({
     where: eq(products.userId, userId),
@@ -97,26 +118,26 @@ export const getProductsByUserId = async (userId: string) => {
 };
 
 export const updateProduct = async (id: string, data: Partial<NewProduct>) => {
-  const existingProduct = await getProductById(id);
+  //const existingProduct = await getProductById(id);
   
   const [product] = await db.update(products).set(data).where(eq(products.id, id)).returning();
   return product;
 
-  if (!existingProduct) {
-    throw new Error(`Product with id ${id} not found`);
-  }
+  //if (!existingProduct) {
+   // throw new Error(`Product with id ${id} not found`);
+ // }
 };
 
 export const deleteProduct = async (id: string) => {
-  const existingProduct = await getProductById(id);
+  //const existingProduct = await getProductById(id);
   
 
   const [product] = await db.delete(products).where(eq(products.id, id)).returning();
   return product;
 
-  if (!existingProduct) {
-    throw new Error(`Product with id ${id} not found`);
-  }
+  //if (!existingProduct) {
+   // throw new Error(`Product with id ${id} not found`);
+ // }
 };
 
 

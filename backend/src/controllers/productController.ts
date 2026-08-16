@@ -81,7 +81,8 @@ export const updateProduct = async (req: Request, res: Response) => {
     const { title, description, imageUrl } = req.body;
 
     // Check if product exists and belongs to user
-    const existingProduct = await queries.getProductById(id as string);
+    //const existingProduct = await queries.getProductById(id as string);
+    const existingProduct = await queries.getProductOwnerById(id as string);
     if (!existingProduct) {
       res.status(404).json({ error: "Product not found" });
       return;
@@ -114,7 +115,8 @@ export const deleteProduct = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     // Check if product exists and belongs to user
-    const existingProduct = await queries.getProductById(id as string);
+    //const existingProduct = await queries.getProductById(id as string);
+    const existingProduct = await queries.getProductOwnerById(id as string);
     if (!existingProduct) {
       res.status(404).json({ error: "Product not found" });
       return;
