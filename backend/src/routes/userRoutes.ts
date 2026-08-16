@@ -6,6 +6,6 @@ import { requireAuth } from "@clerk/express";
 const router = Router();
 
 // /api/users/sync - POST => sync the clerk user to DB (PROTECTED)
-router.post("/sync", requireAuth(),syncUser);
+router.post("/sync",syncUser);
 
 export default router;
