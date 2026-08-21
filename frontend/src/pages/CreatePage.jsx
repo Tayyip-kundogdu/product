@@ -35,12 +35,14 @@ function CreatePage() {
               <input
                 type="text"
                 placeholder="Product title"
+                aria-label="Product title" // <-- Eklendi
                 className="grow"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 required
               />
             </label>
+           
 
             {/* IMGURL INPUT */}
             <label className="input input-bordered flex items-center gap-2 bg-base-200">
@@ -48,17 +50,20 @@ function CreatePage() {
               <input
                 type="url"
                 placeholder="Image URL"
+                aria-label="Image URL" // <-- Eklendi
                 className="grow"
                 value={formData.imageUrl}
                 onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
                 required
               />
             </label>
+            
 
             {/* IMG PREVIEW */}
             {formData.imageUrl && (
               <div className="rounded-box overflow-hidden">
                 <img
+                  key={formData.imageUrl}
                   src={formData.imageUrl}
                   alt="Preview"
                   className="w-full h-40 object-cover"
@@ -72,6 +77,7 @@ function CreatePage() {
                 <FileTextIcon className="size-4 text-base-content/50 mt-1" />
                 <textarea
                   placeholder="Description"
+                  aria-label="Description" // <-- Eklendi
                   className="grow bg-transparent resize-none focus:outline-none min-h-24"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -90,6 +96,7 @@ function CreatePage() {
               type="submit"
               className="btn btn-primary w-full"
               disabled={createProduct.isPending}
+              aria-label={createProduct.isPending ? "Creating product" : "Create Product"} // <-- Eklendi
             >
               {createProduct.isPending ? (
                 <span className="loading loading-spinner" />
