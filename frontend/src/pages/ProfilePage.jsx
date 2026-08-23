@@ -5,17 +5,22 @@ import { PlusIcon, PackageIcon, EyeIcon, EditIcon, Trash2Icon } from "lucide-rea
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  //const { data: products, isLoading } = useMyProducts();
   const { data: products = [], isLoading, error } = useMyProducts();
   const deleteProduct = useDeleteProduct();
 
-  const handleDelete = (id) => {
+  const handleDelete = (e, id) => {
+    e.stopPropagation(); // Karta tıklama olayının tetiklenmesini engeller
     if (confirm("Delete this product?")) deleteProduct.mutate(id);
+  };
+
+  const handleEdit = (e, id) => {
+    e.stopPropagation(); // Karta tıklama olayının tetiklenmesini engeller
+    navigate(`/edit/${id}`);
   };
 
   if (isLoading) return <LoadingSpinner />;
 
-    if (error) {
+  if (error) {
     return (
       <div role="alert" className="alert alert-error">
         <span>Could not load your products. Please try again.</span>
@@ -39,14 +44,12 @@ const ProfilePage = () => {
       <div className="stats bg-base-300 w-full">
         <div className="stat">
           <div className="stat-title">Total Products</div>
-          {/* <div className="stat-value text-primary">{products?.length || 0}</div>*/}
           <div className="stat-value text-primary">{products.length}</div>
         </div>
       </div>
 
       {/* Products */}
-      {/* {products?.length === 0 ? */}
-      {products.length === 0 ?(
+      {products.length === 0 ? (
         <div className="card bg-base-300">
           <div className="card-body items-center text-center py-16">
             <PackageIcon className="size-16 text-base-content/20" />
@@ -60,7 +63,11 @@ const ProfilePage = () => {
       ) : (
         <div className="grid gap-4">
           {products.map((product) => (
-            <div key={product.id} className="card card-side bg-base-300">
+            <div
+              key={product.id}
+              onClick={() => navigate(`/product/${product.id}`)}
+              className="card card-side bg-base-300 cursor-pointer hover:bg-base-200 transition-colors"
+            >
               <figure className="w-32 shrink-0">
                 <img src={product.imageUrl} alt={product.title} className="h-full object-cover" />
               </figure>
@@ -75,13 +82,13 @@ const ProfilePage = () => {
                     <EyeIcon className="size-3" /> View
                   </button>
                   <button
-                    onClick={() => navigate(`/edit/${product.id}`)}
+                    onClick={(e) => handleEdit(e, product.id)}
                     className="btn btn-ghost btn-xs gap-1"
                   >
                     <EditIcon className="size-3" /> Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(product.id)}
+                    onClick={(e) => handleDelete(e, product.id)}
                     className="btn btn-ghost btn-xs text-error gap-1"
                     disabled={deleteProduct.isPending}
                   >
