@@ -28,7 +28,22 @@ function EditProductPage() {
   }
 
   return (
+    /*
     <EditProductForm
+      product={product}
+      isPending={updateProduct.isPending}
+      isError={updateProduct.isError}
+      onSubmit={(formData) => {
+        updateProduct.mutate(
+          { id, ...formData },
+          {
+            onSuccess: () => navigate(`/product/${id}`),
+          }
+        );
+      }}
+    />*/
+    <EditProductForm
+      key={id}
       product={product}
       isPending={updateProduct.isPending}
       isError={updateProduct.isError}
