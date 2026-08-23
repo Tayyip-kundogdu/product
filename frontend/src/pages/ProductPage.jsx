@@ -70,7 +70,7 @@ function ProductPage() {
             <img
               src={product.imageUrl}
               alt={product.title}
-              className="rounded-xl w-full h-80 object-cover"
+              className="rounded-xl w-full h-80 object-contain"
             />
           </figure>
         </div>

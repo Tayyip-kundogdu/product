@@ -1,40 +1,38 @@
-import { Link, useNavigate } from "react-router";
-import { useCreateProduct } from "../hooks/useProducts";
+import { ArrowLeftIcon, ImageIcon, TypeIcon, FileTextIcon, SaveIcon } from "lucide-react";
 import { useState } from "react";
-import { ArrowLeftIcon, FileTextIcon, ImageIcon, SparklesIcon, TypeIcon } from "lucide-react";
+import { Link } from "react-router";
 
-function CreatePage() {
-  const navigate = useNavigate();
-  const createProduct = useCreateProduct();
-  const [formData, setFormData] = useState({ title: "", description: "", imageUrl: "" });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    createProduct.mutate(formData, {
-      onSuccess: () => navigate("/"),
-    });
-  };
+function EditProductForm({ product, isPending, isError, onSubmit }) {
+  const [formData, setFormData] = useState({
+    title: product.title,
+    description: product.description,
+    imageUrl: product.imageUrl,
+  });
 
   return (
     <div className="max-w-lg mx-auto">
-      <Link to="/" className="btn btn-ghost btn-sm gap-1 mb-4">
+      <Link to="/profile" className="btn btn-ghost btn-sm gap-1 mb-4">
         <ArrowLeftIcon className="size-4" /> Back
       </Link>
 
       <div className="card bg-base-300">
         <div className="card-body">
           <h1 className="card-title">
-            <SparklesIcon className="size-5 text-primary" />
-            New Product
+            <SaveIcon className="size-5 text-primary" />
+            Edit Product
           </h1>
 
-          <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-            {/* TITLE INPUT */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              onSubmit(formData);
+            }}
+            className="space-y-4 mt-4"
+          >
             <label className="input input-bordered flex items-center gap-2 bg-base-200">
               <TypeIcon className="size-4 text-base-content/50" />
               <input
                 type="text"
-                aria-label="Product title"
                 placeholder="Product title"
                 className="grow"
                 value={formData.title}
@@ -43,12 +41,10 @@ function CreatePage() {
               />
             </label>
 
-            {/* IMGURL INPUT */}
             <label className="input input-bordered flex items-center gap-2 bg-base-200">
               <ImageIcon className="size-4 text-base-content/50" />
               <input
                 type="url"
-                aria-label="Image URL"
                 placeholder="Image URL"
                 className="grow"
                 value={formData.imageUrl}
@@ -57,14 +53,13 @@ function CreatePage() {
               />
             </label>
 
-            {/* IMG PREVIEW */}
             {formData.imageUrl && (
               <div className="rounded-box overflow-hidden">
                 <img
                   src={formData.imageUrl}
                   alt="Preview"
                   className="w-full h-100 object-contain"
-                  onError={(e) => (e.target.style.display = "none")}
+                  onError={(e) => (e.currentTarget.style.display = "none")}
                 />
               </div>
             )}
@@ -74,7 +69,6 @@ function CreatePage() {
                 <FileTextIcon className="size-4 text-base-content/50 mt-1" />
                 <textarea
                   placeholder="Description"
-                  aria-label="Description"
                   className="grow bg-transparent resize-none focus:outline-none min-h-24"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -83,22 +77,14 @@ function CreatePage() {
               </div>
             </div>
 
-            {createProduct.isError && (
+            {isError && (
               <div role="alert" className="alert alert-error alert-sm">
-                <span>Failed to create. Try again.</span>
+                <span>Failed to update. Try again.</span>
               </div>
             )}
 
-            <button
-              type="submit"
-              className="btn btn-primary w-full"
-              disabled={createProduct.isPending}
-            >
-              {createProduct.isPending ? (
-                <span className="loading loading-spinner" />
-              ) : (
-                "Create Product"
-              )}
+            <button type="submit" className="btn btn-primary w-full" disabled={isPending}>
+              {isPending ? <span className="loading loading-spinner" /> : "Save Changes"}
             </button>
           </form>
         </div>
@@ -106,4 +92,4 @@ function CreatePage() {
     </div>
   );
 }
-export default CreatePage;
+export default EditProductForm;
